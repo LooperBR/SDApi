@@ -1,7 +1,7 @@
 import sqlite3
 
 def connect_db():
-    conn = sqlite3.connect(r'C:\Users\14224136678\Desktop\api_postman\api\data\data.db')
+    conn = sqlite3.connect("dados")
     return conn
 
 def create_table():
@@ -27,34 +27,37 @@ def get_id(id):
             where id=?;
         ''',(id,))
         row = cursor.fetchone()
-        item['id'] = row.id
-        item['produto'] = row.produto
-        item['valor'] = row.valor
-        item['vencimento'] = row.vencimento
-    except:
+        item['id'] = row['id'],
+        item['produto'] = row['produto'],
+        item['valor'] = row['valor'],
+        item['vencimento'] = row['vencimento']
+    except sqlite3.Error as e:
+        print(e)
         item = {}
     return item
 
 def get_all():
-    itens = []
+    itens = {"compras":[]}
     try:
         conn = connect_db()
         conn.row_factory = sqlite3.Row
         cursor = conn.cursor()
         cursor.execute('''
             SELECT * FROM compras;
-        ''',(id,))
+        ''')
         rows = cursor.fetchall()
-        for row in row:
+        for row in rows:
             item = {
-                'id': row.id,
-                'produto': row.produto,
-                'valor': row.valor,
-                'vencimento': row.vencimento
+                'id': row['id'],
+                'produto': row['produto'],
+                'valor': row['valor'],
+                'vencimento': row['vencimento']
             }
-            itens.append(item)
-    except:
-        itens = []
+            itens['compras'].append(item)
+    except sqlite3.Error as e:
+        print(e)
+        print("erro get_all")
+        itens = {"compras":[]}
     return itens
 
 def insert(item):
@@ -64,14 +67,15 @@ def insert(item):
         cursor = conn.cursor()
         cursor.execute('''
             INSERT INTO compras(produto,valor,vencimento)
-            VALUES (?,?,?),
+            VALUES (?,?,?);
         ''',
         (item['produto'],item['valor'],item['vencimento'])
         )
         conn.commit()
         print('comitado')
         inserted_item = get_id(cursor.lastrowid)
-    except:
+    except sqlite3.Error as e:
+        print(e)
         print('rollback')
         conn.rollback()
     finally:

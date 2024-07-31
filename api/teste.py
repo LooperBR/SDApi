@@ -1,2 +1,20 @@
 import sqlite3
-sqlite3.connect("C:\\Users\\14224136678\\Desktop\\api_postman\\api\\data\\data.db")
+
+conn = sqlite3.connect("test_database")
+c = conn.cursor()
+
+c.execute(
+    """
+    CREATE TABLE IF NOT EXISTS products
+    ([product_id] INTEGER PRIMARY KEY, [product_name] TEXT)
+    """
+)
+
+c.execute(
+    """
+    CREATE TABLE IF NOT EXISTS prices
+    ([product_id] INTEGER, [price] INTEGER)
+    """
+)
+
+conn.commit()

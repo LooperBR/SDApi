@@ -33,4 +33,4 @@ def deleteProduto(id):
 
 if __name__ == "__main__":
     banco.create_table()
-    app.route(debug=False)
+    #app.route(debug=False)

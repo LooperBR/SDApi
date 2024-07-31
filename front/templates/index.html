@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>compras</title>
+    <style>
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+    </style>
+</head>
+<body>
+    <h1>teste</h1>
+    <form action="http://127.0.0.1:3000/criar" method="post" name="compra" id="compra">
+        <label for="id">id:</label><br>
+        <input type="text" id="id" name="id" /><br>
+        <label for="produto">produto:</label><br>
+        <input type="text" id="produto" name="produto" /><br>
+        <label for="valor">valor:</label><br>
+        <input type="text" id="valor" name="valor" /><br>
+        <label for="vencimento">vencimento:</label><br>
+        <input type="text" id="vencimento" name="vencimento" /><br>
+        <input type="radio" id="inserir" name="tipo" value="inserir" checked="checked">
+        <label for="inserir">inserir</label><br>
+        <input type="radio" id="atualizar" name="tipo" value="atualizar">
+        <label for="atualizar">atualizar</label><br>
+        <input type="submit" name="Enviar" value = "Enviar" /><br>
+    </form>
+
+    <table>
+        <tr>
+            <th>Id</th>
+            <th>Produto</th>
+            <th>Valor</th>
+            <th>Vencimento</th>
+            <th></th>
+            <th></th>
+        </tr>
+        {% for element in compras %}
+        <tr>
+            <td>{{element['id']}}</td>
+            <td>{{element['produto']}}</td>
+            <td>{{element['valor']}}</td>
+            <td>{{element['vencimento']}}</td>
+            <td>
+                <form action="http://127.0.0.1:3000/delete/{{element['id']}}" method="get">
+                    <button name="foo" value="Deletar">Deletar</button>
+                </form>
+                
+            </td>
+            <td><button onclick="update('{{element['id']}}','{{element['produto']}}','{{element['valor']}}','{{element['vencimento']}}')">Atualizar</button></td>
+        </tr>
+        {% endfor %}
+      </table>
+
+      <script>
+        function update(id,produto,valor,vencimento){
+            document.getElementById('id').value = id
+            document.getElementById('produto').value = produto
+            document.getElementById('valor').value = valor
+            document.getElementById('vencimento').value = vencimento
+            document.getElementById('atualizar').checked = true
+        }
+      </script>
+</body>
+</html>
